@@ -9,11 +9,11 @@ function appCSS(cb) {
     return gulp.src('src/css/style.css')
         .pipe(uglifycss({'uglifycoments': true}))
         .pipe(concat('style.min.css'))
-        .pipe(gulp.dest('build/src/css'))
+        .pipe(gulp.dest('build/css'))
 }
 
 function appHtml(cb) {
-    return gulp.src('index.html')
+    return gulp.src('src/index.html')
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest('build'))
 }
@@ -26,7 +26,7 @@ function appJs() {
         }))
         .pipe(uglify())
         .pipe(concat('app.min.js'))
-        .pipe(gulp.dest('build/src/js'))
+        .pipe(gulp.dest('build/js'))
 }
 
 gulp.task('appHtml', appHtml)
