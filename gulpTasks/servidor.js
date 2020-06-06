@@ -5,7 +5,7 @@ const watch = require('gulp-watch')
 function monitorFiles(cb) {
     watch('src/**/*.html', () => gulp.series('appHtml')())
     watch('src/**/*.js', () => gulp.series('appJs')())
-    watch('src/**/*.scss', () => gulp.series('appCSS')())
+    watch('src/**/*.css', () => gulp.series('appCSS')())
     watch('src/assets/**/*.*', () => gulp.series('appImg')())
 
     return cb()

@@ -36,7 +36,13 @@ main {
 
 /* Casas do jogo */
 div[chess-square] {
+    box-sizing: border-box;
     flex-basis: 12.5%;
+}
+
+div[chess-square]:hover {
+    border-style: inset;
+    border: solid #546e7a;
 }
 
 /* Definição das cores das casas */
