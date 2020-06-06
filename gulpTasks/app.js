@@ -8,7 +8,7 @@ const concat = require('gulp-concat')
 function appCSS(cb) {
     return gulp.src('src/css/style.css')
         .pipe(uglifycss({'uglifycoments': true}))
-        .pipe(concat('app.min.css'))
+        .pipe(concat('style.min.css'))
         .pipe(gulp.dest('build/src/css'))
 }
 
