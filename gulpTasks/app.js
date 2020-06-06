@@ -29,8 +29,14 @@ function appJs() {
         .pipe(gulp.dest('build/js'))
 }
 
+function appImg() {
+    return gulp.src('src/assets/**/*.*')
+        .pipe(gulp.dest('build/assets'))
+}
+
 gulp.task('appHtml', appHtml)
 gulp.task('appJs', appJs)
 gulp.task('appCSS', appCSS)
+gulp.task('appImg', appImg)
 
-module.exports = { appCSS, appHtml, appJs }
+module.exports = { appCSS, appHtml, appJs, appImg }

@@ -6,7 +6,7 @@ function monitorFiles(cb) {
     watch('src/**/*.html', () => gulp.series('appHtml')())
     watch('src/**/*.js', () => gulp.series('appJs')())
     watch('src/**/*.scss', () => gulp.series('appCSS')())
-    watch('src/assets/imgs/**/*.*', () => gulp.series('appImg')())
+    watch('src/assets/**/*.*', () => gulp.series('appImg')())
 
     return cb()
 }
