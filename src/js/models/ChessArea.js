@@ -5,6 +5,8 @@ function ChessSquare(squareId) {
 
     this.element = div
     this.getId = () => div.getAttribute('id')
+
+    return div
 }
 
 function ChessRow(squares) {
@@ -18,4 +20,5 @@ function ChessRow(squares) {
     }
 
     this.element = div
+    return div
 }
