@@ -7,29 +7,28 @@ body {
 }
 
 .pg-title {
+    margin: 15px;
     text-align: center;
     color: whitesmoke;
 }
 
 main {
-    width: 450px;
-    height: 450px;
-    margin: auto;
-    margin-top: 30px;
-    background-color: whitesmoke;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 /* Tabuleiro, organizado em linhas */
 [board] {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: 450px;
+    height: 450px;
+    margin: 20px;
+    background-color: whitesmoke;
 }
 
 /* Linhas do tabuleiro, organizadas em colunas */
 [chess-row] {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
     height: 12.5%;
@@ -56,4 +55,11 @@ div[chess-square]:nth-child(even),
 div[chess-row]:nth-child(even) >
 div[chess-square]:nth-child(odd) {
     background-color: #e1e9ec;
+}
+
+aside {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-basis: 10%;
+    background-color: whitesmoke;
 }
