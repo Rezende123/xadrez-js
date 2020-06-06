@@ -1,0 +1,55 @@
+body {
+    background-color: #546e7a;
+}
+
+.pg-title {
+    text-align: center;
+    color: whitesmoke;
+}
+
+main {
+    width: 60%;
+    height: 60%;
+    margin: auto;
+    margin-top: 30px;
+    background-color: whitesmoke;
+}
+
+/* Tabuleiro, organizado em linhas */
+[board] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* Linhas do tabuleiro, organizadas em colunas */
+[chess-row] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Casas do jogo */
+div[chess-square] {
+    flex-basis: 12.5%;
+    min-height: 30px;
+}
+
+/* Definição das cores das casas */
+/* Todas as casas ímpares de uma linha ímpar serão escuras */
+/* Todas as casas pares de uma linha par serão escuras */
+div[chess-row]:nth-child(odd) >
+div[chess-square]:nth-child(odd),
+div[chess-row]:nth-child(even) > 
+div[chess-square]:nth-child(even)  {
+    background-color: #29434e;
+}
+/* Todas as casas pares de uma linha ímpar serão escuras */
+/* Todas as casas ímpares de uma linha par serão escuras */
+div[chess-row]:nth-child(odd) >
+div[chess-square]:nth-child(even),
+div[chess-row]:nth-child(even) >
+div[chess-square]:nth-child(odd) {
+    background-color: #e1e9ec;
+}
