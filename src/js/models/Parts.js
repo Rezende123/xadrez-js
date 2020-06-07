@@ -59,6 +59,72 @@ function Part(square, imgName) {
 // Torre
 function Tower(square, color = 'b') {
     Part.call(this, square, `${color}_torre`) // Herança
+
+    this.color = color
+
+    this.walking = () => {
+        if (!this.turn) return
+
+        const column = this.square.column
+        const row = this.square.row
+
+        removeDivOptions()
+
+        const markOptions = () => {
+            const mark = (option) => {
+                const markOption = createDivOption(this.move)
+                
+                option.appendChild( markOption )
+            }
+            const horizontal = () => {
+                const scanner = (direction) => {
+                    let index = column + (1 * direction)
+                    let option = this.gameRows[row][index]
+
+                    while(option && option.element && !option.element.children.length) {
+                        mark(option.element)
+
+                        index += (1 * direction)
+                        option = this.gameRows[row][index]
+                    } 
+                }
+                // Left
+                scanner(-1)
+                // Right
+                scanner(1) 
+            }
+            const vertical = () => {
+                const scanner = (direction) => {
+                    let index = row + (1 * direction)
+                    if (this.gameRows[index]) {
+                        let option = this.gameRows[index][column]
+    
+                        while(option && option.element && !option.element.children.length) {
+                            mark(option.element)
+    
+                            index += (1 * direction)
+                            if (this.gameRows[index]) {
+                                option = this.gameRows[index][column]
+                            } else {
+                                option = null
+                            }
+                        } 
+                    }
+                }
+                // Left
+                scanner(-1)
+                // Right
+                scanner(1) 
+            }
+
+            horizontal()
+            vertical()
+        }
+        
+        markOptions()
+    }
+
+    this.square.element.onclick = this.walking
 }
 
 // Cavalo
