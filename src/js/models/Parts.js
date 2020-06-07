@@ -37,6 +37,15 @@ function Part(square, imgName) {
         
         this.square = _square
     }
+    this.move = (element) => {
+        removeDivOptions()
+        
+        const [column, row] = this.square.decodeId(element.id)
+        const chessSquare = new ChessSquare(column, row, element)
+
+        this.clearSquare()
+        this.setSquare(chessSquare)
+    }
     this.setSquare(square)
 }
 
@@ -83,20 +92,8 @@ function Pawn(square, color = 'b') {
                 const direction = (color == 'b')? 1 : -1
                 const idOption = this.square.idFormatter(column, row + (direction * index))
                 const option = document.getElementById(idOption)
-                const move = (element) => {
-                    removeDivOptions()
-                    
-                    const cutedElement = element.id.split('c')
-                    const column = cutedElement[1]
-                    const row = cutedElement[0].split('r')[1]
-
-                    const chessSquare = new ChessSquare(column, row, element)
-
-                    this.clearSquare()
-                    this.setSquare(chessSquare)
-                    console.log(element, chessSquare.element)
-                }
-                const markOption = createDivOption(move)
+                
+                const markOption = createDivOption(this.move)
                 option.appendChild( markOption )
             }
         }

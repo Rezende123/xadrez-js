@@ -4,6 +4,13 @@ function ChessSquare(column, row, element) {
     
     this.getId = () => id
     this.idFormatter = (column, row) => `r${row}c${column}`
+    this.decodeId = (id) => {
+        const cutedElement = id.split('c')
+        const column = cutedElement[1]
+        const row = cutedElement[0].split('r')[1]
+    
+        return [column, row]
+    }
     
     if (!element) {
         const id = this.idFormatter(column, row)   
