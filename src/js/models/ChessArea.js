@@ -5,8 +5,6 @@ function ChessSquare(squareId) {
 
     this.element = div
     this.getId = () => div.getAttribute('id')
-
-    return div
 }
 
 function ChessRow(squares) {
@@ -14,11 +12,12 @@ function ChessRow(squares) {
     div.setAttribute('chess-row','')
 
     if (squares && squares.length) {
-        squares.forEach(square => {
-            div.appendChild(square)
-        });
+        squares
+            .map(square => square.element)
+            .forEach(square => {
+                div.appendChild(square)
+            });
     }
 
     this.element = div
-    return div
 }

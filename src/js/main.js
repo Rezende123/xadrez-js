@@ -9,20 +9,24 @@ const buildBoard = () => {
         return squares
     }
     const buildRows = () => {
+        const rows = []
         for (let row = 0; row < 8; row++) {
             const squares = buildSquares(row) 
             const chessRow = new ChessRow(squares)
             
-            board.appendChild(chessRow)
+            rows.push(squares)
+            board.appendChild(chessRow.element)
         }
+
+        return rows
     }
     const board = document.querySelector('[board]')
     
-    buildRows()
+    return buildRows()
 }
 
-function Game() {
-    const chessRows = Array.from(document.querySelectorAll('[chess-row]'))
+function Game(chessRows) {
+    this.rows = chessRows
     const blackTimeRows = chessRows.slice(0, 2)
     const whiteTimeRows = chessRows.slice(6)
 
@@ -31,9 +35,7 @@ function Game() {
         const addToTeam = (part) => {
             team.push(part)
         }
-        rows.forEach((row, index) => {
-            const squares = Array.from(row.children)
-
+        rows.forEach((squares, index) => {
             if (color === 'b' && index === 0 || color === 'w' && index === 1) {
                 addToTeam( new Tower(squares[0], color) )
                 addToTeam( new Horse(squares[1], color) )
@@ -56,5 +58,5 @@ function Game() {
     this.whiteTeam = insertParts('w', whiteTimeRows)
 }
 
-buildBoard()
-const game = new Game
+const chessRows = buildBoard()
+const game = new Game(chessRows)

@@ -12,8 +12,8 @@ function Part(square, imgName) {
     this.imgName = imgName
 
     this.setSquare = (_square) => {
-        _square.classList.add('cursor')
-        _square.appendChild(this.img)
+        _square.element.classList.add('cursor')
+        _square.element.appendChild(this.img)
         
         this.square = _square
     }
@@ -48,4 +48,8 @@ function Queen(square, color = 'b') {
 // Peão
 function Pawn(square, color = 'b') {
     Part.call(this, square, `${color}_peao`) // Herança
+    this.isFirstStep = false
+    this.square.onclick = () => {
+
+    }
 }
