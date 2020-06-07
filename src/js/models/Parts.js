@@ -26,7 +26,7 @@ function removeDivOptions() {
 function Part(square, imgName) {
     this.img = createPartImage(imgName)
     this.imgName = imgName
-    this.isTurn = false
+    this.turn = null
 
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
@@ -48,6 +48,8 @@ function Part(square, imgName) {
         this.clearSquare()
         this.setSquare(chessSquare)
         this.square.element.onclick = this.walking
+
+        this.turn(this.square)
     }
     this.setSquare(square)
 }
@@ -85,7 +87,7 @@ function Pawn(square, color = 'b') {
     this.color = color
 
     this.walking = () => {
-        if (!this.isTurn) return
+        if (!this.turn) return
 
         let column = this.square.column
         let row = this.square.row
@@ -109,8 +111,6 @@ function Pawn(square, color = 'b') {
         } else {
             markOptions(1)
         }
-
-        this.isTurn = false
     }
     this.square.element.onclick = this.walking
 }

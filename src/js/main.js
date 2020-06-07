@@ -52,10 +52,29 @@ function Game(chessRows) {
 
         return team
     }
+    this.setTurn = (team, turn) => team.forEach(team => team.turn = turn)
+    this.play = async () => {
+        this.blackTeam = insertParts('b', blackTimeRows)
+        this.whiteTeam = insertParts('w', whiteTimeRows)
+        let countTurn = 0
+        const turn = (team) => {
+            return new Promise((res, rej) => {
+                this.setTurn(team, res)
+            })
+        }
 
-    this.blackTeam = insertParts('b', blackTimeRows)
-    this.whiteTeam = insertParts('w', whiteTimeRows)
+        while(true) {
+            let team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
+            
+            await turn(team)
+            this.setTurn(team, null)
+            
+            countTurn++
+        }
+
+    }
 }
 
 const chessRows = buildBoard()
 const game = new Game(chessRows)
+game.play()//.then(res => console.log(res))
