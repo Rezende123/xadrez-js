@@ -89,8 +89,8 @@ function Pawn(square, color = 'b') {
     this.walking = () => {
         if (!this.turn) return
 
-        let column = this.square.column
-        let row = this.square.row
+        const column = this.square.column
+        const row = this.square.row
         
         removeDivOptions()
         
