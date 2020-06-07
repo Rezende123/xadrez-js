@@ -2,8 +2,7 @@ const buildBoard = () => {
     const buildSquares = (row) => {
         let squares = []
         for (let column = 0; column < 8; column++) {
-            const squareId = `r${row}c${column}`
-            squares.push(new ChessSquare(squareId))
+            squares.push(new ChessSquare(column, row))
         }
 
         return squares

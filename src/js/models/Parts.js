@@ -6,6 +6,19 @@ function createPartImage (imgName) {
     return img
 }
 
+function createDivOption() {
+    const div = document.createElement('div')
+    div.classList.add('walk-option')
+    div.classList.add('cursor')
+    div.setAttribute('play-option', '')
+    return div
+}
+
+function removeDivOptions() {
+    const options = Array.from(document.querySelectorAll('[play-option]'))
+    options.forEach(option => option.remove())
+}
+
 // Peças, a função pai que todas as outras funções vão herdar
 function Part(square, imgName) {
     this.img = createPartImage(imgName)
@@ -48,8 +61,30 @@ function Queen(square, color = 'b') {
 // Peão
 function Pawn(square, color = 'b') {
     Part.call(this, square, `${color}_peao`) // Herança
-    this.isFirstStep = false
-    this.square.onclick = () => {
+    
+    this.isFirstStep = true
+    this.color = color
 
+    this.square.element.onclick = () => {
+        let column = this.square.column
+        let row = this.square.row
+        
+        removeDivOptions()
+        
+        const markOptions = (steps) => {
+            for (let index = 1; index <= steps; index++) {
+                const direction = (color == 'b')? 1 : -1
+                const idOption = this.square.idFormatter(column, row + (direction * index))
+                const option = document.getElementById(idOption)
+
+                option.appendChild( createDivOption() )
+            }
+        }
+
+        if (this.isFirstStep) {
+            markOptions(2)
+        } else {
+            markOptions(1)
+        }
     }
 }

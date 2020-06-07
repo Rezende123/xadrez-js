@@ -38,7 +38,7 @@ main {
 div[chess-square] {
     box-sizing: border-box;
     flex-basis: 12.5%;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,4 +82,12 @@ aside {
 .img-part {
     width: 30px;
     height: 30px;
+}
+
+.walk-option {
+    background: #6ec6ffad;
+    height: 60%;
+    width: 60%;
+    margin: auto;
+    border-radius: 100px;
 }
