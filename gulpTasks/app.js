@@ -20,11 +20,6 @@ function appHtml(cb) {
 
 function appJs() {
     return gulp.src('src/js/**/*.js')
-        .pipe(babel({
-            comments: false,
-            presets: ['env']
-        }))
-        .pipe(uglify())
         .pipe(concat('app.min.js'))
         .pipe(gulp.dest('build/js'))
 }
