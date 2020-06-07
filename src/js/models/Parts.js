@@ -6,7 +6,7 @@ function createPartImage (imgName) {
     return img
 }
 
-function createDivOption(callback) {
+function createDivOption(callback, walking) {
     const div = document.createElement('div')
     div.classList.add('walk-option')
     div.classList.add('cursor')
@@ -26,10 +26,12 @@ function removeDivOptions() {
 function Part(square, imgName) {
     this.img = createPartImage(imgName)
     this.imgName = imgName
+    this.isTurn = false
 
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
         this.square.element.innerHTML = ''
+        this.square.element.onclick = null
     }
     this.setSquare = (_square) => {
         _square.element.classList.add('cursor')
@@ -45,6 +47,7 @@ function Part(square, imgName) {
 
         this.clearSquare()
         this.setSquare(chessSquare)
+        this.square.element.onclick = this.walking
     }
     this.setSquare(square)
 }
@@ -81,7 +84,9 @@ function Pawn(square, color = 'b') {
     this.isFirstStep = true
     this.color = color
 
-    this.square.element.onclick = () => {
+    this.walking = () => {
+        if (!this.isTurn) return
+
         let column = this.square.column
         let row = this.square.row
         
@@ -92,7 +97,7 @@ function Pawn(square, color = 'b') {
                 const direction = (color == 'b')? 1 : -1
                 const idOption = this.square.idFormatter(column, row + (direction * index))
                 const option = document.getElementById(idOption)
-                
+
                 const markOption = createDivOption(this.move)
                 option.appendChild( markOption )
             }
@@ -100,8 +105,12 @@ function Pawn(square, color = 'b') {
 
         if (this.isFirstStep) {
             markOptions(2)
+            this.isFirstStep = false
         } else {
             markOptions(1)
         }
+
+        this.isTurn = false
     }
+    this.square.element.onclick = this.walking
 }

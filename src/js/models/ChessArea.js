@@ -9,7 +9,7 @@ function ChessSquare(column, row, element) {
         const column = cutedElement[1]
         const row = cutedElement[0].split('r')[1]
     
-        return [column, row]
+        return [Number(column), Number(row)]
     }
     
     if (!element) {
