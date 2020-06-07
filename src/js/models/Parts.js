@@ -26,7 +26,9 @@ function removeDivOptions() {
 function Part(square, imgName) {
     this.img = createPartImage(imgName)
     this.imgName = imgName
+
     this.turn = null
+    this.gameRows = null
 
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
@@ -97,8 +99,7 @@ function Pawn(square, color = 'b') {
         const markOptions = (steps) => {
             for (let index = 1; index <= steps; index++) {
                 const direction = (color == 'b')? 1 : -1
-                const idOption = this.square.idFormatter(column, row + (direction * index))
-                const option = document.getElementById(idOption)
+                const option = this.gameRows[row  + (direction * index) ][column].element
 
                 const markOption = createDivOption(this.move)
                 option.appendChild( markOption )

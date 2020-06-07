@@ -52,7 +52,10 @@ function Game(chessRows) {
 
         return team
     }
-    this.setTurn = (team, turn) => team.forEach(team => team.turn = turn)
+    this.setTurn = (team, turn) => team.forEach(part => {
+        part.gameRows = this.rows
+        part.turn = turn
+    })
     this.play = async () => {
         this.blackTeam = insertParts('b', blackTimeRows)
         this.whiteTeam = insertParts('w', whiteTimeRows)
