@@ -6,11 +6,14 @@ function createPartImage (imgName) {
     return img
 }
 
-function createDivOption() {
+function createDivOption(callback) {
     const div = document.createElement('div')
     div.classList.add('walk-option')
     div.classList.add('cursor')
     div.setAttribute('play-option', '')
+
+    div.onclick = (e) => callback(e.target.parentNode)
+
     return div
 }
 
@@ -24,6 +27,10 @@ function Part(square, imgName) {
     this.img = createPartImage(imgName)
     this.imgName = imgName
 
+    this.clearSquare = () => {
+        this.square.element.classList.remove('cursor');
+        this.square.element.innerHTML = ''
+    }
     this.setSquare = (_square) => {
         _square.element.classList.add('cursor')
         _square.element.appendChild(this.img)
@@ -76,8 +83,21 @@ function Pawn(square, color = 'b') {
                 const direction = (color == 'b')? 1 : -1
                 const idOption = this.square.idFormatter(column, row + (direction * index))
                 const option = document.getElementById(idOption)
+                const move = (element) => {
+                    removeDivOptions()
+                    
+                    const cutedElement = element.id.split('c')
+                    const column = cutedElement[1]
+                    const row = cutedElement[0].split('r')[1]
 
-                option.appendChild( createDivOption() )
+                    const chessSquare = new ChessSquare(column, row, element)
+
+                    this.clearSquare()
+                    this.setSquare(chessSquare)
+                    console.log(element, chessSquare.element)
+                }
+                const markOption = createDivOption(move)
+                option.appendChild( markOption )
             }
         }
 
