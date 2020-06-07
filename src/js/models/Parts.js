@@ -9,6 +9,7 @@ function createPartImage (imgName) {
 // Peças, a função pai que todas as outras funções vão herdar
 function Part(square, imgName) {
     this.img = createPartImage(imgName)
+    this.imgName = imgName
 
     this.setSquare = (_square) => {
         _square.classList.add('cursor')
