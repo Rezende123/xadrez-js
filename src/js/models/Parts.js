@@ -7,8 +7,8 @@ function createPartImage (imgName) {
 }
 
 // Peças, a função pai que todas as outras funções vão herdar
-function Part(square, color = 'b') {
-    this.img = createPartImage(`${color}_torre`)
+function Part(square, imgName) {
+    this.img = createPartImage(imgName)
 
     this.setSquare = (_square) => {
         _square.classList.add('cursor')
@@ -21,5 +21,30 @@ function Part(square, color = 'b') {
 
 // Torre
 function Tower(square, color = 'b') {
-    Part.call(this, square, color) // Herança
+    Part.call(this, square, `${color}_torre`) // Herança
+}
+
+// Cavalo
+function Horse(square, color = 'b') {
+    Part.call(this, square, `${color}_cavalo`) // Herança
+}
+
+// Bispo
+function Bishp(square, color = 'b') {
+    Part.call(this, square, `${color}_bispo`) // Herança
+}
+
+// Rei
+function King(square, color = 'b') {
+    Part.call(this, square, `${color}_rei`) // Herança
+}
+
+// Rainha
+function Queen(square, color = 'b') {
+    Part.call(this, square, `${color}_rainha`) // Herança
+}
+
+// Peão
+function Pawn(square, color = 'b') {
+    Part.call(this, square, `${color}_peao`) // Herança
 }
