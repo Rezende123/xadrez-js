@@ -130,6 +130,60 @@ function Tower(square, color = 'b') {
 // Cavalo
 function Horse(square, color = 'b') {
     Part.call(this, square, `${color}_cavalo`) // Herança
+
+    this.color = color
+
+    this.walking = () => {
+        if (!this.turn) return
+
+        const column = this.square.column
+        const row = this.square.row
+
+        removeDivOptions()
+
+        const markOptions = () => {
+            const mark = (option) => {
+                const markOption = createDivOption(this.move)
+                
+                option.appendChild( markOption )
+            }
+            const vertical = () => {
+                const scanner = (orientation, side) => {
+                    if (this.gameRows[row + side] &&
+                        this.gameRows[row + side][column + orientation] &&
+                        !this.gameRows[row + side][column + orientation].element.children.length) {
+                        const element = this.gameRows[row + side][column + orientation].element
+                        mark(element)
+                    }
+                }
+                scanner(2, 1)
+                scanner(2, -1)
+                scanner(-2, 1)
+                scanner(-2, -1)
+            }
+            const horizontal = () => {
+                const scanner = (orientation, side) => {
+                    if (this.gameRows[row + orientation] &&
+                        this.gameRows[row + orientation][column + side] &&
+                        !this.gameRows[row + orientation][column + side].element.children.length) {
+                        const element = this.gameRows[row + orientation][column + side].element
+                        mark(element)
+                    }
+                }
+                scanner(2, 1)
+                scanner(2, -1)
+                scanner(-2, 1)
+                scanner(-2, -1)
+            }
+
+            vertical()
+            horizontal()
+        }
+
+        markOptions()
+    }
+
+    this.square.element.onclick = this.walking
 }
 
 // Bispo
