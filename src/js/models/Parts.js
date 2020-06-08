@@ -351,6 +351,12 @@ function Queen(square, color = 'b') {
                 
                 option.appendChild( markOption )
             }
+            const killOptions = (option) => {
+                if (option && this.isRival(option.id)) {
+                    const markOption = createDivOption(this.killRival, true)
+                    option.appendChild( markOption )
+                }
+            }
             const diagonal = (direction, sense) => {
                 let indexRow = row + (1 * sense)
                 let indexColumn = column + (1 * direction)
@@ -369,6 +375,7 @@ function Queen(square, color = 'b') {
                             option = this.gameRows[indexRow][indexColumn]
                         }
                     }
+                    killOptions(option.element)
                 }
             }
             const horizontal = () => {
@@ -381,7 +388,8 @@ function Queen(square, color = 'b') {
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
-                    } 
+                    }
+                    killOptions(option.element)
                 }
                 // Left
                 scanner(-1)
@@ -403,7 +411,8 @@ function Queen(square, color = 'b') {
                             } else {
                                 option = null
                             }
-                        } 
+                        }
+                        killOptions(option.element)
                     }
                 }
                 // Left
