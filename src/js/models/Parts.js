@@ -206,7 +206,7 @@ function King(square, color = 'b') {
                 
                 option.appendChild( markOption )
             }
-            const vertical = () => {
+            const horizontal = () => {
                 const scanner = (orientation) => {
                     if (this.gameRows[row][column + orientation] &&
                         !this.gameRows[row][column + orientation].element.children.length) {
@@ -217,7 +217,7 @@ function King(square, color = 'b') {
                 scanner(1)
                 scanner(-1)
             }
-            const horizontal = () => {
+            const vertical = () => {
                 const scanner = (orientation) => {
                     if (this.gameRows[row + orientation] &&
                         this.gameRows[row + orientation][column] &&
