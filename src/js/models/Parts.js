@@ -29,18 +29,25 @@ function Part(square, imgName) {
     this.turn = null
     this.gameRows = null
     this.rivals = null
+    this.isCheck = false
     
     this.isRival = (elementId) => 
         this.rivals
         .find(rival => rival.square && rival.square.element.id == elementId)
     
     this.walkOptions = (option) => {
-        const markOption = createDivOption(this.move)
-        
-        option.appendChild( markOption )
+        if (!this.isCheck || (this.isCheck && option.getAttribute('save-king') != null) ) {
+            const markOption = createDivOption(this.move)
+            
+            option.appendChild( markOption )
+        }
     }
-    this.killOptions = (option) => {
-        if (option && option.element && this.isRival(option.element.id)) {
+    this.killOptions = (option, markedWalkOptions) => {
+        if ((option && option.element && this.isRival(option.element.id) &&
+            (!this.isCheck || this.isCheck && option.element.getAttribute('save-king') != null))) {
+            if (this.turn == 'test' && markedWalkOptions) { // Ocorre apenas na busca do rei
+                markedWalkOptions.forEach(marked => marked.setAttribute('save-king', ''))
+            }
             const markOption = createDivOption(this.killRival, true)
             option.element.appendChild( markOption )
             option.element.setAttribute('kill-risk', '')
@@ -108,14 +115,16 @@ function Tower(square, color = 'b') {
                 const scanner = (direction) => {
                     let index = column + (1 * direction)
                     let option = this.gameRows[row][index]
+                    let markedWalkOptions = []
 
                     while(option && option.element && !option.element.children.length) {
                         this.walkOptions(option.element)
+                        markedWalkOptions.push(option.element)
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
                     }
-                    this.killOptions(option)
+                    this.killOptions(option, markedWalkOptions)
                 }
                 // Left
                 scanner(-1)
@@ -127,10 +136,12 @@ function Tower(square, color = 'b') {
                     let index = row + (1 * direction)
                     if (this.gameRows[index]) {
                         let option = this.gameRows[index][column]
+                        let markedWalkOptions = []
     
                         while(option && option.element && !option.element.children.length) {
                             this.walkOptions(option.element)
-    
+                            markedWalkOptions.push(option.element)
+
                             index += (1 * direction)
                             if (this.gameRows[index]) {
                                 option = this.gameRows[index][column]
@@ -138,7 +149,7 @@ function Tower(square, color = 'b') {
                                 option = null
                             }
                         }
-                        this.killOptions(option)
+                        this.killOptions(option, markedWalkOptions)
                     }
                 }
                 // Left
@@ -244,19 +255,23 @@ function Bishp(square, color = 'b') {
 
                 if (isValidSquare()) {
                     let option = this.gameRows[indexRow][indexColumn]
+                    let markedWalkOptions = []
 
                     while(option && option.element && !option.element.children.length) {
                         this.walkOptions(option.element)
+                        markedWalkOptions.push(option.element)
 
                         indexRow += (1 * sense)
                         indexColumn += (1 * direction)
                         
                         if (isValidSquare()) {
                             option = this.gameRows[indexRow][indexColumn]
+                        } else {
+                            option = null
                         }
                     }
 
-                    this.killOptions(option)
+                    this.killOptions(option, markedWalkOptions)
                 }
             }
 
@@ -378,32 +393,38 @@ function Queen(square, color = 'b') {
 
                 if (isValidSquare()) {
                     let option = this.gameRows[indexRow][indexColumn]
+                    let markedWalkOptions = []
 
                     while(option && option.element && !option.element.children.length) {
                         this.walkOptions(option.element)
+                        markedWalkOptions.push(option.element)
 
                         indexRow += (1 * sense)
                         indexColumn += (1 * direction)
                         
                         if (isValidSquare()) {
                             option = this.gameRows[indexRow][indexColumn]
+                        } else {
+                            option = null
                         }
                     }
-                    this.killOptions(option)
+                    this.killOptions(option, markedWalkOptions)
                 }
             }
             const horizontal = () => {
                 const scanner = (direction) => {
                     let index = column + (1 * direction)
                     let option = this.gameRows[row][index]
+                    let markedWalkOptions = []
 
                     while(option && option.element && !option.element.children.length) {
                         this.walkOptions(option.element)
+                        markedWalkOptions.push(option.element)
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
                     }
-                    this.killOptions(option)
+                    this.killOptions(option, markedWalkOptions)
                 }
                 // Left
                 scanner(-1)
@@ -415,9 +436,11 @@ function Queen(square, color = 'b') {
                     let index = row + (1 * direction)
                     if (this.gameRows[index]) {
                         let option = this.gameRows[index][column]
+                        let markedWalkOptions = []
     
                         while(option && option.element && !option.element.children.length) {
                             this.walkOptions(option.element)
+                            markedWalkOptions.push(option.element)
     
                             index += (1 * direction)
                             if (this.gameRows[index]) {
@@ -426,7 +449,7 @@ function Queen(square, color = 'b') {
                                 option = null
                             }
                         }
-                        this.killOptions(option)
+                        this.killOptions(option, markedWalkOptions)
                     }
                 }
                 // Left
@@ -487,8 +510,7 @@ function Pawn(square, color = 'b') {
                     const option = this.gameRows[newRow][column].element
     
                     if (!option.children.length) {
-                        const markOption = createDivOption(this.move)
-                        option.appendChild( markOption )
+                        this.walkOptions(option)
                     }
                 }
             }

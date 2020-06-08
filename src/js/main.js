@@ -52,10 +52,11 @@ function Game(chessRows) {
 
         return team
     }
-    this.setTurn = (team, turn, rivals) => team.forEach(part => {
+    this.setTurn = (team, turn, rivals, isCheck) => team.forEach(part => {
         part.gameRows = this.rows
         part.turn = turn
         part.rivals = rivals
+        part.isCheck = isCheck
     })
     this.isCheck = (team, rivals) => {
         let kingInRisk = false
@@ -63,9 +64,9 @@ function Game(chessRows) {
 
         const simulateTurn = rival => {
             rival.gameRows = this.rows
-            rival.rivals = team
-            rival.turn = true
-            rival.walking(true)
+            rival.rivals = [king]
+            rival.turn = 'test'
+            rival.walking()
 
             const killRisk = Array.from(document.querySelectorAll('[kill-risk]'))
             kingInRisk = killRisk.find(option => option.id == king.square.element.id) || kingInRisk
@@ -90,24 +91,23 @@ function Game(chessRows) {
             }
         }
 
-        return kingInRisk
+        return !!kingInRisk // Para converter o valor para booleano
     }
     this.play = async () => {
         this.blackTeam = insertParts('b', blackTimeRows)
         this.whiteTeam = insertParts('w', whiteTimeRows)
         let countTurn = 0
-        const turn = (team, rivals) => {
+        const turn = (team, rivals, isCheck = false) => {
             return new Promise((res, rej) => {
-                this.setTurn(team, res, rivals)
+                this.setTurn(team, res, rivals, isCheck)
             })
         }
         
         while(true) {
             const team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
             const rivals = (countTurn % 2 == 0) ? this.whiteTeam : this.blackTeam
-            
-            console.log(this.isCheck(team, rivals))
-            await turn(team, rivals)
+            const isCheck = this.isCheck(team, rivals)  
+            await turn(team, rivals, isCheck)
             this.setTurn(team, null)
 
             const removeDeads = (_rivals) => {
