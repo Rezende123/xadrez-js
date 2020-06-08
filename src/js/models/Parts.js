@@ -135,6 +135,55 @@ function Horse(square, color = 'b') {
 // Bispo
 function Bishp(square, color = 'b') {
     Part.call(this, square, `${color}_bispo`) // Herança
+
+    this.color = color
+
+    this.walking = () => {
+        if (!this.turn) return
+    
+        const column = this.square.column
+        const row = this.square.row
+    
+        removeDivOptions()
+
+        const markOptions = () => {
+            const mark = (option) => {
+                const markOption = createDivOption(this.move)
+                
+                option.appendChild( markOption )
+            }
+            const diagonal = (direction, sense) => {
+                let indexRow = row + (1 * sense)
+                let indexColumn = column + (1 * direction)
+                const isValidSquare = () => this.gameRows[indexRow] && this.gameRows[indexRow][indexColumn]
+
+                if (isValidSquare()) {
+                    let option = this.gameRows[indexRow][indexColumn]
+
+                    while(option && option.element && !option.element.children.length) {
+                        mark(option.element)
+
+                        indexRow += (1 * sense)
+                        indexColumn += (1 * direction)
+                        
+                        if (isValidSquare()) {
+                            option = this.gameRows[indexRow][indexColumn]
+                        }
+                    }
+                }
+            }
+
+            // Superior
+            diagonal(1, -1)
+            diagonal(1, 1)
+            // Inferior
+            diagonal(-1, -1)
+            diagonal(-1, 1)
+        }
+        markOptions()
+    }
+
+    this.square.element.onclick = this.walking
 }
 
 // Rei
