@@ -6,9 +6,14 @@ function createPartImage (imgName) {
     return img
 }
 
-function createDivOption(callback, walking) {
+function createDivOption(callback, isKill) {
     const div = document.createElement('div')
     div.classList.add('walk-option')
+
+    if (isKill) {
+        div.classList.add('kill-option')
+    }
+
     div.classList.add('cursor')
     div.setAttribute('play-option', '')
 
@@ -29,6 +34,7 @@ function Part(square, imgName) {
 
     this.turn = null
     this.gameRows = null
+    this.rivals = null
 
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
@@ -52,6 +58,16 @@ function Part(square, imgName) {
         this.square.element.onclick = this.walking
 
         this.turn(this.square)
+    }
+    this.killRival = (element) => {
+        const rival = this.rivals.find(rival => rival.square && rival.square.element.id == element.id)
+        const deadZoneId = (this.color == 'b') ? '#player2' : '#player1'
+        const deadZone = document.querySelector(deadZoneId)
+
+        rival.square = null
+        deadZone.appendChild(rival.img)
+
+        this.move(element)
     }
     this.setSquare(square)
 }
@@ -425,6 +441,22 @@ function Pawn(square, color = 'b') {
         removeDivOptions()
         
         const markOptions = (steps) => {
+            const killOptions = (sense) => {
+                if (this.gameRows[newRow] &&
+                    this.gameRows[newRow][column + sense] &&
+                    this.gameRows[newRow][column + sense].element.children.length
+                    ) {
+                    const option = this.gameRows[newRow][column + sense].element
+                    const isRival = this.rivals.find(rival => rival.square && rival.square.element.id == option.id)
+    
+                    if (isRival) {
+                        const markOption = createDivOption(this.killRival, true)
+                        option.appendChild( markOption )
+                    }
+                }
+            }
+
+            let newRow = 0
             for (let index = 1; index <= steps; index++) {
                 const direction = (color == 'b')? 1 : -1
                 newRow = row  + (direction * index) 
@@ -437,6 +469,10 @@ function Pawn(square, color = 'b') {
                         option.appendChild( markOption )
                     }
                 }
+            }
+            killOptions(1)
+            killOptions(-1)
+        }
 
         if (this.isFirstStep) {
             markOptions(2)

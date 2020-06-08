@@ -52,25 +52,37 @@ function Game(chessRows) {
 
         return team
     }
-    this.setTurn = (team, turn) => team.forEach(part => {
+    this.setTurn = (team, turn, rivals) => team.forEach(part => {
         part.gameRows = this.rows
         part.turn = turn
+        part.rivals = rivals
     })
     this.play = async () => {
         this.blackTeam = insertParts('b', blackTimeRows)
         this.whiteTeam = insertParts('w', whiteTimeRows)
         let countTurn = 0
-        const turn = (team) => {
+        const turn = (team, rivals) => {
             return new Promise((res, rej) => {
-                this.setTurn(team, res)
+                this.setTurn(team, res, rivals)
             })
         }
 
         while(true) {
-            let team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
+            const team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
+            const rivals = (countTurn % 2 == 0) ? this.whiteTeam : this.blackTeam
             
-            await turn(team)
+            await turn(team, rivals)
             this.setTurn(team, null)
+
+            const removeDeads = (_rivals) => {
+                let index = _rivals.findIndex(rival => !rival.square);
+                if (index > -1) {
+                    _rivals.splice(index, 1);
+                }
+                console.log(index, _rivals.length)
+            }
+
+            removeDeads(rivals)
             
             countTurn++
         }
