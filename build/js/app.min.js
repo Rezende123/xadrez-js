@@ -86,6 +86,10 @@ function Game(chessRows) {
             kingInRisk.classList.add('check')
         } else {
             const squareInCheck = document.querySelector('.check')
+            const squareSaveKing = Array.from(document.querySelectorAll('[save-king]'))
+            
+            squareSaveKing.forEach(square => square.removeAttribute('save-king'))
+
             if (squareInCheck) {
                 squareInCheck.classList.remove('check')
             }
