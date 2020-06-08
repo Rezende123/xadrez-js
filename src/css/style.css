@@ -95,5 +95,9 @@ aside {
 
 .kill-option {
     position: absolute;
-    background: #ff6e6ead;
+    background: #886d6dad;
+}
+
+.check {
+    background: #ff6e6ead !important;
 }

@@ -20,10 +20,6 @@ function createDivOption(callback, isKill) {
 
     return div
 }
-function removeDivOptions() {
-    const options = Array.from(document.querySelectorAll('[play-option]'))
-    options.forEach(option => option.remove())
-}
 
 // Peças, a função pai que todas as outras funções vão herdar
 function Part(square, imgName) {
@@ -47,10 +43,15 @@ function Part(square, imgName) {
         if (option && option.element && this.isRival(option.element.id)) {
             const markOption = createDivOption(this.killRival, true)
             option.element.appendChild( markOption )
+            option.element.setAttribute('kill-risk', '')
         }
     }
-
+    this.removeDivOptions = () => {
+        const options = Array.from(document.querySelectorAll('[play-option]'))
+        options.forEach(option => option.remove())
+    }
     this.clearSquare = () => {
+        this.square.element.removeAttribute('kill-risk')
         this.square.element.classList.remove('cursor');
         this.square.element.innerHTML = ''
         this.square.element.onclick = null
@@ -62,7 +63,7 @@ function Part(square, imgName) {
         this.square = _square
     }
     this.move = (element) => {
-        removeDivOptions()
+        this.removeDivOptions()
         
         const [column, row] = this.square.decodeId(element.id)
         const chessSquare = new ChessSquare(column, row, element)
@@ -70,6 +71,8 @@ function Part(square, imgName) {
         this.clearSquare()
         this.setSquare(chessSquare)
         this.square.element.onclick = this.walking
+
+        this.isFirstStep = false
 
         this.turn(this.square)
     }
@@ -98,7 +101,7 @@ function Tower(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
 
-        removeDivOptions()
+        this.removeDivOptions()
 
         const markOptions = () => {
             const horizontal = () => {
@@ -166,7 +169,7 @@ function Horse(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
 
-        removeDivOptions()
+        this.removeDivOptions()
 
         const markOptions = () => {
             const vertical = () => {
@@ -230,7 +233,7 @@ function Bishp(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
     
-        removeDivOptions()
+        this.removeDivOptions()
 
         const markOptions = () => {
             const diagonal = (direction, sense) => {
@@ -282,7 +285,7 @@ function King(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
     
-        removeDivOptions()
+        this.removeDivOptions()
 
         const markOptions = () => {
             const horizontal = () => {
@@ -364,7 +367,7 @@ function Queen(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
     
-        removeDivOptions()
+        this.removeDivOptions()
 
         const markOptions = () => {
             const diagonal = (direction, sense) => {
@@ -461,7 +464,7 @@ function Pawn(square, color = 'b') {
         const column = this.square.column
         const row = this.square.row
         
-        removeDivOptions()
+        this.removeDivOptions()
         
         const markOptions = (steps) => {
             const selectKillOptions = (sense) => {
@@ -495,7 +498,6 @@ function Pawn(square, color = 'b') {
 
         if (this.isFirstStep) {
             markOptions(2)
-            this.isFirstStep = false
         } else {
             markOptions(1)
         }

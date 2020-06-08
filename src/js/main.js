@@ -57,6 +57,41 @@ function Game(chessRows) {
         part.turn = turn
         part.rivals = rivals
     })
+    this.isCheck = (team, rivals) => {
+        let kingInRisk = false
+        const king = team.find(part => part.__proto__.constructor.name === 'King')
+
+        const simulateTurn = rival => {
+            rival.gameRows = this.rows
+            rival.rivals = team
+            rival.turn = true
+            rival.walking(true)
+
+            const killRisk = Array.from(document.querySelectorAll('[kill-risk]'))
+            kingInRisk = killRisk.find(option => option.id == king.square.element.id) || kingInRisk
+
+            rival.removeDivOptions()
+        }
+        rivals.forEach(simulateTurn)
+
+        const resetRivals = rival => {
+            rival.gameRows = null
+            rival.rivals = null
+            rival.turn = null
+        }
+        rivals.forEach(resetRivals)
+
+        if (kingInRisk) {
+            kingInRisk.classList.add('check')
+        } else {
+            const squareInCheck = document.querySelector('.check')
+            if (squareInCheck) {
+                squareInCheck.classList.remove('check')
+            }
+        }
+
+        return kingInRisk
+    }
     this.play = async () => {
         this.blackTeam = insertParts('b', blackTimeRows)
         this.whiteTeam = insertParts('w', whiteTimeRows)
@@ -66,11 +101,12 @@ function Game(chessRows) {
                 this.setTurn(team, res, rivals)
             })
         }
-
+        
         while(true) {
             const team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
             const rivals = (countTurn % 2 == 0) ? this.whiteTeam : this.blackTeam
             
+            console.log(this.isCheck(team, rivals))
             await turn(team, rivals)
             this.setTurn(team, null)
 
