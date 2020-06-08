@@ -225,6 +225,12 @@ function Bishp(square, color = 'b') {
                 
                 option.appendChild( markOption )
             }
+            const killOptions = (option) => {
+                if (option && this.isRival(option.id)) {
+                    const markOption = createDivOption(this.killRival, true)
+                    option.appendChild( markOption )
+                }
+            }
             const diagonal = (direction, sense) => {
                 let indexRow = row + (1 * sense)
                 let indexColumn = column + (1 * direction)
@@ -243,6 +249,8 @@ function Bishp(square, color = 'b') {
                             option = this.gameRows[indexRow][indexColumn]
                         }
                     }
+
+                    killOptions(option.element)
                 }
             }
 
