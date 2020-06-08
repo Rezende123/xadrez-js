@@ -5,7 +5,6 @@ function createPartImage (imgName) {
 
     return img
 }
-
 function createDivOption(callback, isKill) {
     const div = document.createElement('div')
     div.classList.add('walk-option')
@@ -21,7 +20,6 @@ function createDivOption(callback, isKill) {
 
     return div
 }
-
 function removeDivOptions() {
     const options = Array.from(document.querySelectorAll('[play-option]'))
     options.forEach(option => option.remove())
@@ -39,6 +37,19 @@ function Part(square, imgName) {
     this.isRival = (elementId) => 
         this.rivals
         .find(rival => rival.square && rival.square.element.id == elementId)
+    
+    this.walkOptions = (option) => {
+        const markOption = createDivOption(this.move)
+        
+        option.appendChild( markOption )
+    }
+    this.killOptions = (option) => {
+        if (option && option.element && this.isRival(option.element.id)) {
+            const markOption = createDivOption(this.killRival, true)
+            option.element.appendChild( markOption )
+        }
+    }
+
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
         this.square.element.innerHTML = ''
@@ -90,29 +101,18 @@ function Tower(square, color = 'b') {
         removeDivOptions()
 
         const markOptions = () => {
-            const mark = (option) => {
-                const markOption = createDivOption(this.move)
-                
-                option.appendChild( markOption )
-            }
-            const killOptions = (option) => {
-                if (option && this.isRival(option.id)) {
-                    const markOption = createDivOption(this.killRival, true)
-                    option.appendChild( markOption )
-                }
-            }
             const horizontal = () => {
                 const scanner = (direction) => {
                     let index = column + (1 * direction)
                     let option = this.gameRows[row][index]
 
                     while(option && option.element && !option.element.children.length) {
-                        mark(option.element)
+                        this.walkOptions(option.element)
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
                     }
-                    killOptions(option.element)
+                    this.killOptions(option)
                 }
                 // Left
                 scanner(-1)
@@ -126,7 +126,7 @@ function Tower(square, color = 'b') {
                         let option = this.gameRows[index][column]
     
                         while(option && option.element && !option.element.children.length) {
-                            mark(option.element)
+                            this.walkOptions(option.element)
     
                             index += (1 * direction)
                             if (this.gameRows[index]) {
@@ -135,7 +135,7 @@ function Tower(square, color = 'b') {
                                 option = null
                             }
                         }
-                        killOptions(option.element)
+                        this.killOptions(option)
                     }
                 }
                 // Left
@@ -169,18 +169,18 @@ function Horse(square, color = 'b') {
         removeDivOptions()
 
         const markOptions = () => {
-            const mark = (option) => {
-                const markOption = createDivOption(this.move)
-                
-                option.appendChild( markOption )
-            }
             const vertical = () => {
                 const scanner = (orientation, side) => {
                     if (this.gameRows[row + side] &&
-                        this.gameRows[row + side][column + orientation] &&
-                        !this.gameRows[row + side][column + orientation].element.children.length) {
-                        const element = this.gameRows[row + side][column + orientation].element
-                        mark(element)
+                        this.gameRows[row + side][column + orientation]) {
+                        const option = this.gameRows[row + side][column + orientation]
+
+                        if (!option.element.children.length) {
+                            const element = option.element
+                            this.walkOptions(element)
+                        } else {
+                            this.killOptions(option)
+                        }
                     }
                 }
                 scanner(2, 1)
@@ -191,10 +191,15 @@ function Horse(square, color = 'b') {
             const horizontal = () => {
                 const scanner = (orientation, side) => {
                     if (this.gameRows[row + orientation] &&
-                        this.gameRows[row + orientation][column + side] &&
-                        !this.gameRows[row + orientation][column + side].element.children.length) {
-                        const element = this.gameRows[row + orientation][column + side].element
-                        mark(element)
+                        this.gameRows[row + orientation][column + side]) {
+                        const option = this.gameRows[row + orientation][column + side]
+
+                        if (!option.element.children.length) {
+                            const element = option.element
+                            this.walkOptions(element)
+                        } else {
+                            this.killOptions(option)
+                        }
                     }
                 }
                 scanner(2, 1)
@@ -228,27 +233,17 @@ function Bishp(square, color = 'b') {
         removeDivOptions()
 
         const markOptions = () => {
-            const mark = (option) => {
-                const markOption = createDivOption(this.move)
-                
-                option.appendChild( markOption )
-            }
-            const killOptions = (option) => {
-                if (option && this.isRival(option.id)) {
-                    const markOption = createDivOption(this.killRival, true)
-                    option.appendChild( markOption )
-                }
-            }
             const diagonal = (direction, sense) => {
                 let indexRow = row + (1 * sense)
                 let indexColumn = column + (1 * direction)
-                const isValidSquare = () => this.gameRows[indexRow] && this.gameRows[indexRow][indexColumn]
+                const isValidSquare = () =>
+                    this.gameRows[indexRow] && this.gameRows[indexRow][indexColumn]
 
                 if (isValidSquare()) {
                     let option = this.gameRows[indexRow][indexColumn]
 
                     while(option && option.element && !option.element.children.length) {
-                        mark(option.element)
+                        this.walkOptions(option.element)
 
                         indexRow += (1 * sense)
                         indexColumn += (1 * direction)
@@ -258,7 +253,7 @@ function Bishp(square, color = 'b') {
                         }
                     }
 
-                    killOptions(option.element)
+                    this.killOptions(option)
                 }
             }
 
@@ -290,25 +285,16 @@ function King(square, color = 'b') {
         removeDivOptions()
 
         const markOptions = () => {
-            const mark = (option) => {
-                const markOption = createDivOption(this.move)
-                
-                option.appendChild( markOption )
-            }
-            const killOptions = (option) => {
-                if (option && this.isRival(option.id)) {
-                    const markOption = createDivOption(this.killRival, true)
-                    option.appendChild( markOption )
-                }
-            }
             const horizontal = () => {
                 const scanner = (orientation) => {
                     if (this.gameRows[row][column + orientation]) {
-                        if (!this.gameRows[row][column + orientation].element.children.length) {
-                            const element = this.gameRows[row][column + orientation].element
-                            mark(element)
+                        const option = this.gameRows[row][column + orientation]
+
+                        if (!option.element.children.length) {
+                            const element = option.element
+                            this.walkOptions(element)
                         } else {
-                            killOptions(this.gameRows[row][column + orientation].element)
+                            this.killOptions(option)
                         }
                     }
                 }
@@ -319,11 +305,13 @@ function King(square, color = 'b') {
                 const scanner = (orientation) => {
                     if (this.gameRows[row + orientation] &&
                         this.gameRows[row + orientation][column]) {
-                        if (!this.gameRows[row + orientation][column].element.children.length) {
-                            const element = this.gameRows[row + orientation][column].element
-                            mark(element)
+                        const option = this.gameRows[row + orientation][column]
+
+                        if (!option.element.children.length) {
+                            const element = option.element
+                            this.walkOptions(element)
                         } else {
-                            killOptions(this.gameRows[row + orientation][column].element)
+                            this.killOptions(option)
                         }
                     }
                 }
@@ -336,11 +324,13 @@ function King(square, color = 'b') {
 
                 if (this.gameRows[indexRow] &&
                     this.gameRows[indexRow][indexColumn]) {
-                    if (!this.gameRows[indexRow][indexColumn].element.children.length) {
-                        const element = this.gameRows[indexRow][indexColumn].element
-                        mark(element)
+                    const option = this.gameRows[indexRow][indexColumn]
+
+                    if (!option.element.children.length) {
+                        const element = option.element
+                        this.walkOptions(element)
                     } else {
-                        killOptions(this.gameRows[indexRow][indexColumn].element)
+                        this.killOptions(option)
                     }
                 }
             }
@@ -377,27 +367,17 @@ function Queen(square, color = 'b') {
         removeDivOptions()
 
         const markOptions = () => {
-            const mark = (option) => {
-                const markOption = createDivOption(this.move)
-                
-                option.appendChild( markOption )
-            }
-            const killOptions = (option) => {
-                if (option && this.isRival(option.id)) {
-                    const markOption = createDivOption(this.killRival, true)
-                    option.appendChild( markOption )
-                }
-            }
             const diagonal = (direction, sense) => {
                 let indexRow = row + (1 * sense)
                 let indexColumn = column + (1 * direction)
-                const isValidSquare = () => this.gameRows[indexRow] && this.gameRows[indexRow][indexColumn]
+                const isValidSquare = () =>
+                    this.gameRows[indexRow] && this.gameRows[indexRow][indexColumn]
 
                 if (isValidSquare()) {
                     let option = this.gameRows[indexRow][indexColumn]
 
                     while(option && option.element && !option.element.children.length) {
-                        mark(option.element)
+                        this.walkOptions(option.element)
 
                         indexRow += (1 * sense)
                         indexColumn += (1 * direction)
@@ -406,7 +386,7 @@ function Queen(square, color = 'b') {
                             option = this.gameRows[indexRow][indexColumn]
                         }
                     }
-                    killOptions(option.element)
+                    this.killOptions(option)
                 }
             }
             const horizontal = () => {
@@ -415,12 +395,12 @@ function Queen(square, color = 'b') {
                     let option = this.gameRows[row][index]
 
                     while(option && option.element && !option.element.children.length) {
-                        mark(option.element)
+                        this.walkOptions(option.element)
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
                     }
-                    killOptions(option.element)
+                    this.killOptions(option)
                 }
                 // Left
                 scanner(-1)
@@ -434,7 +414,7 @@ function Queen(square, color = 'b') {
                         let option = this.gameRows[index][column]
     
                         while(option && option.element && !option.element.children.length) {
-                            mark(option.element)
+                            this.walkOptions(option.element)
     
                             index += (1 * direction)
                             if (this.gameRows[index]) {
@@ -443,7 +423,7 @@ function Queen(square, color = 'b') {
                                 option = null
                             }
                         }
-                        killOptions(option.element)
+                        this.killOptions(option)
                     }
                 }
                 // Left
@@ -484,17 +464,14 @@ function Pawn(square, color = 'b') {
         removeDivOptions()
         
         const markOptions = (steps) => {
-            const killOptions = (sense) => {
+            const selectKillOptions = (sense) => {
                 if (this.gameRows[newRow] &&
                     this.gameRows[newRow][column + sense] &&
                     this.gameRows[newRow][column + sense].element.children.length
                     ) {
-                    const option = this.gameRows[newRow][column + sense].element
+                    const option = this.gameRows[newRow][column + sense]
     
-                    if (this.isRival(option.id)) {
-                        const markOption = createDivOption(this.killRival, true)
-                        option.appendChild( markOption )
-                    }
+                    this.killOptions(option)
                 }
             }
 
@@ -512,8 +489,8 @@ function Pawn(square, color = 'b') {
                     }
                 }
             }
-            killOptions(1)
-            killOptions(-1)
+            selectKillOptions(1)
+            selectKillOptions(-1)
         }
 
         if (this.isFirstStep) {
