@@ -95,6 +95,12 @@ function Tower(square, color = 'b') {
                 
                 option.appendChild( markOption )
             }
+            const killOptions = (option) => {
+                if (option && this.isRival(option.id)) {
+                    const markOption = createDivOption(this.killRival, true)
+                    option.appendChild( markOption )
+                }
+            }
             const horizontal = () => {
                 const scanner = (direction) => {
                     let index = column + (1 * direction)
@@ -105,7 +111,8 @@ function Tower(square, color = 'b') {
 
                         index += (1 * direction)
                         option = this.gameRows[row][index]
-                    } 
+                    }
+                    killOptions(option.element)
                 }
                 // Left
                 scanner(-1)
@@ -127,7 +134,8 @@ function Tower(square, color = 'b') {
                             } else {
                                 option = null
                             }
-                        } 
+                        }
+                        killOptions(option.element)
                     }
                 }
                 // Left
