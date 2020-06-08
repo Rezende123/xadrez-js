@@ -79,7 +79,6 @@ function Game(chessRows) {
                 if (index > -1) {
                     _rivals.splice(index, 1);
                 }
-                console.log(index, _rivals.length)
             }
 
             removeDeads(rivals)

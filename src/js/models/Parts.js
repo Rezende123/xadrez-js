@@ -35,7 +35,10 @@ function Part(square, imgName) {
     this.turn = null
     this.gameRows = null
     this.rivals = null
-
+    
+    this.isRival = (elementId) => 
+        this.rivals
+        .find(rival => rival.square && rival.square.element.id == elementId)
     this.clearSquare = () => {
         this.square.element.classList.remove('cursor');
         this.square.element.innerHTML = ''
@@ -447,9 +450,8 @@ function Pawn(square, color = 'b') {
                     this.gameRows[newRow][column + sense].element.children.length
                     ) {
                     const option = this.gameRows[newRow][column + sense].element
-                    const isRival = this.rivals.find(rival => rival.square && rival.square.element.id == option.id)
     
-                    if (isRival) {
+                    if (this.isRival(option.id)) {
                         const markOption = createDivOption(this.killRival, true)
                         option.appendChild( markOption )
                     }
