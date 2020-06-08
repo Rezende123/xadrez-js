@@ -427,12 +427,16 @@ function Pawn(square, color = 'b') {
         const markOptions = (steps) => {
             for (let index = 1; index <= steps; index++) {
                 const direction = (color == 'b')? 1 : -1
-                const option = this.gameRows[row  + (direction * index) ][column].element
+                newRow = row  + (direction * index) 
 
-                const markOption = createDivOption(this.move)
-                option.appendChild( markOption )
-            }
-        }
+                if (this.gameRows[newRow] && this.gameRows[newRow][column]) {
+                    const option = this.gameRows[newRow][column].element
+    
+                    if (!option.children.length) {
+                        const markOption = createDivOption(this.move)
+                        option.appendChild( markOption )
+                    }
+                }
 
         if (this.isFirstStep) {
             markOptions(2)
