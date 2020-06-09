@@ -99,7 +99,11 @@ function Game(chessRows) {
             
             if (!squareSaveKing.length) {
                 const checkKillMessage = document.getElementById('check-kill')
-                checkKillMessage.classList.remove('hide') 
+                checkKillMessage.classList.remove('hide')
+
+                document.getElementById('winner').innerHTML =
+                    (king.color == 'b')? 'Player 2' : 'Player 1'
+
                 this.isFinish = true
             }
         } else {
