@@ -101,3 +101,22 @@ aside {
 .check {
     background: #ff6e6ead !important;
 }
+
+.hide {
+    display: none;
+}
+
+#check-kill {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    background-color: #1e88e5;
+    color: whitesmoke;
+    text-align: center;
+    padding-top: 40px;
+    box-sizing: border-box;
+    border-radius: 10px;
+
+    left: calc(50% - 200px);
+    top: calc(50% - 100px)
+}

@@ -58,6 +58,7 @@ function Game(chessRows) {
         part.rivals = rivals
         part.isCheck = isCheck
     })
+    this.isFinish = false
     this.isCheck = (team, rivals) => {
         let kingInRisk = false
         const king = team.find(part => part.__proto__.constructor.name === 'King')
@@ -81,14 +82,21 @@ function Game(chessRows) {
             rival.turn = null
         }
         rivals.forEach(resetRivals)
-
+        
+        const squareSaveKing = Array.from(document.querySelectorAll('[save-king]'))
+        
         if (kingInRisk) {
             kingInRisk.classList.add('check')
-        } else {
-            const squareInCheck = document.querySelector('.check')
-            const squareSaveKing = Array.from(document.querySelectorAll('[save-king]'))
             
+            if (!squareSaveKing.length) {
+                const checkKillMessage = document.getElementById('check-kill')
+                checkKillMessage.classList.remove('hide') 
+                this.isFinish = true
+            }
+        } else {
             squareSaveKing.forEach(square => square.removeAttribute('save-king'))
+            
+            const squareInCheck = document.querySelector('.check')
 
             if (squareInCheck) {
                 squareInCheck.classList.remove('check')
@@ -107,7 +115,7 @@ function Game(chessRows) {
             })
         }
         
-        while(true) {
+        while(!this.isFinish) {
             const team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
             const rivals = (countTurn % 2 == 0) ? this.whiteTeam : this.blackTeam
             const isCheck = this.isCheck(team, rivals)  
