@@ -56,7 +56,7 @@ function Part(square, imgName) {
     this.killOptions = (option, markedWalkOptions) => {
         if (
             option && option.element && this.isRival(option.element.id) &&
-            (!this.isCheck || (this.isCheck && option.element.getAttribute('save-king') != null))
+            (!this.isCheck || (this.isCheck && option.element.getAttribute('save-king') == 'killer'))
         ) {
 
             if (this.turn == 'test' && markedWalkOptions) { // Ocorre apenas na busca do rei

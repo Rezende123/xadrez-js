@@ -75,7 +75,7 @@ function Game(chessRows) {
             kingInRisk = thisRivalIsRisk || kingInRisk
 
             if (thisRivalIsRisk && kingInRisk) {
-                rival.square.element.setAttribute('save-king', '')
+                rival.square.element.setAttribute('save-king', 'killer')
             }
 
             const clearKillRisk = (option) => option.removeAttribute('kill-risk')
