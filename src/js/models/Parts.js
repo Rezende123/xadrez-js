@@ -60,7 +60,7 @@ function Part(square, imgName) {
         ) {
 
             if (this.turn == 'test' && markedWalkOptions) { // Ocorre apenas na busca do rei
-                markedWalkOptions.forEach(marked => marked.setAttribute('save-king', ''))
+                markedWalkOptions.forEach(marked => marked.setAttribute('save-king', 'kill-steps'))
             }
 
             const markOption = createDivOption(this.killRival, true)
