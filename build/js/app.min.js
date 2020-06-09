@@ -97,8 +97,8 @@ function Game(chessRows) {
             if (squareSaveKing.length == 1 &&
                 squareSaveKing[0].getAttribute('save-king') == 'killer') {
 
-                const checkKillMessage = document.getElementById('check-kill')
-                checkKillMessage.classList.remove('hide')
+                const checkmateMessage = document.getElementById('check-kill')
+                checkmateMessage.classList.remove('hide')
 
                 document.getElementById('winner').innerHTML =
                     (king.color == 'b')? 'Player 2' : 'Player 1'
