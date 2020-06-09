@@ -127,7 +127,8 @@ function Game(chessRows) {
         while(!this.isFinish) {
             const team = (countTurn % 2 == 0) ? this.blackTeam : this.whiteTeam
             const rivals = (countTurn % 2 == 0) ? this.whiteTeam : this.blackTeam
-            const isCheck = this.isCheck(team, rivals)  
+            const isCheck = this.isCheck(team, rivals)
+
             await turn(team, rivals, isCheck)
             this.setTurn(team, null)
 

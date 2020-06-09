@@ -36,14 +36,28 @@ function Part(square, imgName) {
         .find(rival => rival.square && rival.square.element.id == elementId)
     
     this.walkOptions = (option) => {
-        if (!this.isCheck || (this.isCheck && option.getAttribute('save-king') != null) ) {
+        if (!this.isCheck ||
+            (
+                this.isCheck &&
+                option.getAttribute('save-king') != null &&
+                this.__proto__.constructor.name != 'King'
+            ) || 
+            (
+                this.isCheck &&
+                option.getAttribute('save-king') == null &&
+                this.__proto__.constructor.name == 'King'
+            )
+        ) {
             const markOption = createDivOption(this.move)
             
             option.appendChild( markOption )
         }
     }
     this.killOptions = (option, markedWalkOptions) => {
-        if (option && option.element && this.isRival(option.element.id)) {
+        if (
+            option && option.element && this.isRival(option.element.id) &&
+            (!this.isCheck || (this.isCheck && option.element.getAttribute('save-king') != null))
+        ) {
 
             if (this.turn == 'test' && markedWalkOptions) { // Ocorre apenas na busca do rei
                 markedWalkOptions.forEach(marked => marked.setAttribute('save-king', ''))
