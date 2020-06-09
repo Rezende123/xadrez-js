@@ -4,7 +4,7 @@
   "description": "Um jogo de xadrez desenvolvido com o intuito de exercitar conhecimentos em js",
   "main": "src/js/main.js",
   "scripts": {
-    "start": "http-server ."
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
