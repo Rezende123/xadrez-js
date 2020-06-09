@@ -70,7 +70,16 @@ function Game(chessRows) {
             rival.walking()
 
             const killRisk = Array.from(document.querySelectorAll('[kill-risk]'))
-            kingInRisk = killRisk.find(option => option.id == king.square.element.id) || kingInRisk
+            const thisRivalIsRisk = killRisk.find(option => option.id == king.square.element.id)
+
+            kingInRisk = thisRivalIsRisk || kingInRisk
+
+            if (thisRivalIsRisk && kingInRisk) {
+                rival.square.element.setAttribute('save-king', '')
+            }
+
+            const clearKillRisk = (option) => option.removeAttribute('kill-risk')
+            killRisk.forEach(clearKillRisk)
 
             rival.removeDivOptions()
         }

@@ -43,11 +43,12 @@ function Part(square, imgName) {
         }
     }
     this.killOptions = (option, markedWalkOptions) => {
-        if ((option && option.element && this.isRival(option.element.id) &&
-            (!this.isCheck || this.isCheck && option.element.getAttribute('save-king') != null))) {
+        if (option && option.element && this.isRival(option.element.id)) {
+
             if (this.turn == 'test' && markedWalkOptions) { // Ocorre apenas na busca do rei
                 markedWalkOptions.forEach(marked => marked.setAttribute('save-king', ''))
             }
+
             const markOption = createDivOption(this.killRival, true)
             option.element.appendChild( markOption )
             option.element.setAttribute('kill-risk', '')
@@ -513,7 +514,7 @@ function Pawn(square, color = 'b') {
                         this.walkOptions(option)
                     }
                 }
-                
+
                 selectKillOptions(1)
                 selectKillOptions(-1)
             }
