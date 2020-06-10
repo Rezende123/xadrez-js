@@ -6,20 +6,20 @@ Desenvolvido com *JavaScript* puro, contendo interações com a DOM, funções c
 
 - Bispo
 
-[Movimento do Bispo](./src/assets/gifs/bispo.gif)
+![Movimento do Bispo](./src/assets/gifs/bispo.gif)
 
 - Cavalo
 
-[Movimento do Cavalo](./src/assets/gifs/cavalo.gif)
+![Movimento do Cavalo](./src/assets/gifs/cavalo.gif)
 
 - Torre
 
-[Movimento da Torre](./src/assets/gifs/torre.gif)
+![Movimento da Torre](./src/assets/gifs/torre.gif)
 
 - xeque / rainha
 
-[Movimento de Xeque e da Rainha](./src/assets/gifs/xeque.gif)
+![Movimento de Xeque e da Rainha](./src/assets/gifs/xeque.gif)
 
 - xeque-mate / rainha
 
-[Movimento de Xeque-Mate e da Rainha](./src/assets/gifs/xeque-mate.gif)
+![Movimento de Xeque-Mate e da Rainha](./src/assets/gifs/xeque-mate.gif)
