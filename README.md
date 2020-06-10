@@ -16,10 +16,10 @@ Desenvolvido com *JavaScript* puro, contendo interações com a DOM, funções c
 
 ![Movimento da Torre](./src/assets/gifs/torre.gif)
 
-- xeque / rainha
+- Xeque / Rainha
 
 ![Movimento de Xeque e da Rainha](./src/assets/gifs/xeque.gif)
 
-- xeque-mate / rainha
+- Xeque-Mate / Rainha
 
 ![Movimento de Xeque-Mate e da Rainha](./src/assets/gifs/xeque-mate.gif)
