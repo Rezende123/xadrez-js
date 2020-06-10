@@ -61,7 +61,24 @@ function Game(chessRows) {
     this.isFinish = false
     this.isCheck = (team, rivals) => {
         let kingInRisk = false
+        let threatRivalsInRisk = false
+        let canSaveKing = false
+        const threatRivals = []
         const king = team.find(part => part.__proto__.constructor.name === 'King')
+        const partIsInRisk = (part) => 
+            Array.from(document.querySelectorAll('[kill-risk]'))
+            .find(option => option.id == part.square.element.id)
+
+        const clearSimulate = (_team) => {
+            const clearKillRisk = (option) => option.removeAttribute('kill-risk')
+            document.querySelectorAll('[kill-risk]').forEach(clearKillRisk)
+
+            _team.removeDivOptions()
+
+            _team.gameRows = null
+            _team.rivals = null
+            _team.turn = null
+        }
 
         const simulateRivalTurn = rival => {
             rival.gameRows = this.rows
@@ -69,33 +86,46 @@ function Game(chessRows) {
             rival.turn = 'test'
             rival.walking()
 
-            const killRisk = Array.from(document.querySelectorAll('[kill-risk]'))
-            const thisRivalIsRisk = killRisk.find(option => option.id == king.square.element.id)
+            const thisRivalIsRisk = partIsInRisk(king)
 
             kingInRisk = thisRivalIsRisk || kingInRisk
 
             if (thisRivalIsRisk && kingInRisk) {
                 rival.square.element.setAttribute('save-king', 'killer')
+                threatRivals.push(rival)
             }
 
-            const clearKillRisk = (option) => option.removeAttribute('kill-risk')
-            killRisk.forEach(clearKillRisk)
-
-            rival.removeDivOptions()
-
-            rival.gameRows = null
-            rival.rivals = null
-            rival.turn = null
+            clearSimulate(rival)
         }
         rivals.forEach(simulateRivalTurn)
-        
-        const squareSaveKing = Array.from(document.querySelectorAll('[save-king]'))
+
+        const simulateTurn = _team => {
+            _team.gameRows = this.rows
+            _team.rivals = threatRivals
+            _team.turn = 'test'
+            _team.walking()
+
+            threatRivals.forEach(r => threatRivalsInRisk = partIsInRisk(r) || threatRivalsInRisk)
+
+            if (kingInRisk) {
+                const verifyCanSaveKing = () => 
+                    Array.from(document.querySelectorAll('.walk-option'))
+                    .find(option =>
+                        option.parentNode.getAttribute('save-king') != null &&
+                        _team.__proto__.constructor.name != 'King'
+                    )
+                
+                canSaveKing = verifyCanSaveKing() || canSaveKing
+            }
+            
+            clearSimulate(_team)
+        }
+        team.forEach(simulateTurn)
         
         if (kingInRisk) {
             kingInRisk.classList.add('check')
             
-            if (squareSaveKing.length == 1 &&
-                squareSaveKing[0].getAttribute('save-king') == 'killer') {
+            if (!canSaveKing && !threatRivalsInRisk) {
 
                 const checkmateMessage = document.getElementById('check-kill')
                 checkmateMessage.classList.remove('hide')
@@ -106,6 +136,7 @@ function Game(chessRows) {
                 this.isFinish = true
             }
         } else {
+            const squareSaveKing = Array.from(document.querySelectorAll('[save-king]'))
             squareSaveKing.forEach(square => square.removeAttribute('save-king'))
             
             const squareInCheck = document.querySelector('.check')
